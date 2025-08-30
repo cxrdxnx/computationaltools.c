@@ -1,0 +1,31 @@
+// Dora la Exploradora II Problem
+//30/08/2025
+// Mateo Osorio Cardona
+
+
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+
+
+ int doralaExploradora(){
+     int x = 0 , y = 0;
+     int flagStop 0;
+     
+     while(!flagStop){
+             scanf("%i,%i",&x,&y);
+             
+        if (x == 0 && y == 0){
+              flagStop = 1
+              }
+             
+             }
+     }
+
+
+
+int main (void){
+    
+        
+    }
