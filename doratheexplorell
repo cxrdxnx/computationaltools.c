@@ -1,6 +1,6 @@
 // Dora la Exploradora II Problem
 //30/08/2025
-
+// Mateo Osorio Cardona
 
 
 
@@ -20,9 +20,15 @@
               flagStop = 1
               }
              
+        
              }
-     }
+     int diagonal = 0 = x + y - 1;
+     
+     
+     int itistriangular = (diagonal - 1) diagonal / 2
+     
 
+     }
 
 
 int main (void){
