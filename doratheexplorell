@@ -1,55 +1,32 @@
-// Dora la Exploradora II Problem
-//30/08/2025
-
-
-
-
 #include <stdio.h>
 #include <stdlib.h>
-#include <math.h>
 
-
- int doralaExploradora(){
-     int x = 0 , y = 0;
-     int flagStop = 0;
-     
-     while(!flagStop){
-             scanf("%i,%i",&x,&y);
-             
-        if (x == 0 && y == 0){
-              flagStop = 1;
-              }
-             
-        
-             }
-             
-     int diagonal = x + y - 1;
-     
-     
-     int itistriangular = (diagonal - 1)* diagonal / 2;
-     
-     
-     if(diagonal % 2 == 0){
-                 
-            int stepstaken = itistriangular  + x;
-              printf("%i",stepstaken);
-                 } else {
-                        
-                          int stepstaken = itistriangular  + y;
-                            printf("%i",stepstaken);
-                        }
-                        
-                      
-
-     }
-
-
-int main (void){
+int doralaExploradora(){
+    int x = 0, y = 0;
     
-         doralaExploradora();
-         
-         
-         system("pause");
-         return 0;
-         
+    while(1){
+        scanf("%i %i", &x, &y);
+        
+        if (x == 0 && y == 0){
+            break; 
+        }
+        
+        int diagonal = x + y - 1;
+        int itistriangular = (diagonal - 1) * diagonal / 2;
+        
+        if(diagonal % 2 == 0){
+            int stepstaken = itistriangular + x;
+            printf("%i\n", stepstaken); 
+        } else {
+            int stepstaken = itistriangular + y;
+            printf("%i\n", stepstaken);  
+        }
     }
+    
+    return 0;  
+}
+
+int main(void){
+    doralaExploradora();
+    return 0;
+}
