@@ -11,27 +11,41 @@
 
  int doralaExploradora(){
      int x = 0 , y = 0;
-     int flagStop 0;
+     int flagStop = 0;
      
      while(!flagStop){
              scanf("%i,%i",&x,&y);
              
         if (x == 0 && y == 0){
-              flagStop = 1
+              flagStop = 1;
               }
              
         
              }
-     int diagonal = 0 = x + y - 1;
+             
+     int diagonal = x + y - 1;
      
      
-     int itistriangular = (diagonal - 1) diagonal / 2
+     int itistriangular = (diagonal - 1)* diagonal / 2;
      
+     
+     if(diagonal % 2 == 0){
+                 
+            int stepstaken = itistriangular  + x;
+                 } else {
+                        
+                          int stepstaken = itistriangular  + y;
+                        }
 
      }
 
 
 int main (void){
     
-        
+         doralaExploradora();
+         
+         
+         system("pause");
+         return 0;
+         
     }
