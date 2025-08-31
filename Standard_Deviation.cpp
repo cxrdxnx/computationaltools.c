@@ -1,4 +1,4 @@
-// Taller 1 - Estructura de Datos - Punto 3: Desviación Estándar
+
 
 #include <stdio.h>
 #include <string.h>
@@ -7,10 +7,10 @@
 
 int main(void) {
     int n;
-    // lee mientras haya un entero positivo
+
     while (scanf("%d", &n) == 1 && n > 0) {
         if (n <= 1) {
-            // para n = 1 o menos dejamos 0 (no esta definida para n=1)
+
             printf("0.000000\n");
             continue;
         }
