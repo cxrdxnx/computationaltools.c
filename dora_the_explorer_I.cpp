@@ -1,6 +1,6 @@
 #include <cmath>
 #include <iostream>
-#include <utility> // For std::pair<>
+#include <utility>
 
 using ll = long long int;
 
@@ -56,4 +56,5 @@ std::pair<int, int> get_coordinates(ll steps)
 	// Coordinate pattern for odd diagonals.
 	return std::pair<int, int>(diagonal - steps_inside_diagonal + 1, steps_inside_diagonal);
 }
+
 
