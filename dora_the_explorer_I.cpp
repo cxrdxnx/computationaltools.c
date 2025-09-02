@@ -46,15 +46,16 @@ std::pair<int, int> get_coordinates(ll steps)
 {
 	ll diagonal = get_diagonal(steps);
 	
-	// Calculate the steps inside the diagonal by substracting the total steps up to the previous diagonal.
+
 	ll steps_inside_diagonal = steps - gauss_sum(diagonal - 1);
 
 	if (diagonal % 2 == 0)
-		// Coordinate pattern for even diagonals.
+		
 		return std::pair<int, int>(steps_inside_diagonal, diagonal - steps_inside_diagonal + 1);
 	
-	// Coordinate pattern for odd diagonals.
+
 	return std::pair<int, int>(diagonal - steps_inside_diagonal + 1, steps_inside_diagonal);
 }
+
 
 
