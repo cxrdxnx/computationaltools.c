@@ -1,0 +1,144 @@
+#include <stdio.h>
+#include <string.h>
+#include <math.h>
+#include <stdlib.h>
+
+void procesarArrayArmadoCaja(int cantidadDeComponentesDeLaCaja);
+void mergerSort(int arrayCaja[], int izquierdaCaja, int derechaCaja);
+void merger(int arrayCaja[], int izquierdaCaja, int medioCaja, int derechaCaja);
+void procesarBusquedaGramos(int arrayCaja[], int cantidadDeComponentesDeLaCaja);
+void busquedaBinaria(int arrayCaja[], int arrayGramosABuscar[], int izquierdaBusqueda, int derechaBusqueda, int cantidadBusquedas);
+
+int main(void) {
+    int cantidadDeComponentesDeLaCaja = 0;
+    
+    while(scanf("%i", &cantidadDeComponentesDeLaCaja) != EOF) {
+        procesarArrayArmadoCaja(cantidadDeComponentesDeLaCaja);
+    }
+    
+    return 0;
+}
+
+void procesarArrayArmadoCaja(int cantidadDeComponentesDeLaCaja) {
+    int arrayCaja[cantidadDeComponentesDeLaCaja];
+    int interacionArmado = 0;
+    int indexPrintf = 0;
+     
+    for(interacionArmado = 0; interacionArmado < cantidadDeComponentesDeLaCaja; interacionArmado++) {
+        scanf("%i", &arrayCaja[interacionArmado]);
+    }
+    
+    mergerSort(arrayCaja, 0, cantidadDeComponentesDeLaCaja - 1);
+    
+ 
+    // Procesar para busqueda 
+    procesarBusquedaGramos(arrayCaja, cantidadDeComponentesDeLaCaja);
+}
+
+void mergerSort(int arrayCaja[], int izquierdaCaja, int derechaCaja) {
+    if (izquierdaCaja < derechaCaja) {  
+        int medioCaja = izquierdaCaja + (derechaCaja - izquierdaCaja) / 2;
+        
+        mergerSort(arrayCaja, izquierdaCaja, medioCaja);
+        mergerSort(arrayCaja, medioCaja + 1, derechaCaja);
+        merger(arrayCaja, izquierdaCaja, medioCaja, derechaCaja);
+    }
+}
+
+void merger(int arrayCaja[], int izquierdaCaja, int medioCaja, int derechaCaja) {
+    int numbersFirst = medioCaja - izquierdaCaja + 1;
+    int numbersSecond = derechaCaja - medioCaja;
+
+    int izquierdaMomentanea[numbersFirst];
+    int derechaMomentanea[numbersSecond];
+    
+    int indexI, indexJ;
+
+    for (indexI = 0; indexI < numbersFirst; indexI++) {
+        izquierdaMomentanea[indexI] = arrayCaja[izquierdaCaja + indexI];
+    }
+    
+    for (indexJ = 0; indexJ < numbersSecond; indexJ++) {
+        derechaMomentanea[indexJ] = arrayCaja[medioCaja + 1 + indexJ];
+    }
+    
+    indexI = 0;
+    indexJ = 0;
+    int indexK = izquierdaCaja;
+    
+    while (indexI < numbersFirst && indexJ < numbersSecond) {
+        if (izquierdaMomentanea[indexI] <= derechaMomentanea[indexJ]) {
+            arrayCaja[indexK] = izquierdaMomentanea[indexI];
+            indexI++;
+        } else {
+            arrayCaja[indexK] = derechaMomentanea[indexJ];
+            indexJ++;
+        }
+        indexK++;
+    }
+
+    while (indexI < numbersFirst) {
+        arrayCaja[indexK] = izquierdaMomentanea[indexI];
+        indexI++;
+        indexK++;
+    }
+    
+    while (indexJ < numbersSecond) {
+        arrayCaja[indexK] = derechaMomentanea[indexJ];
+        indexJ++;
+        indexK++;
+    }
+}
+
+void procesarBusquedaGramos(int arrayCaja[], int cantidadDeComponentesDeLaCaja) {
+    int cantidadBusquedas = 0;
+    int interacionesBusquedas = 0;
+    
+    scanf("%i", &cantidadBusquedas);
+    int arrayGramosABuscar[cantidadBusquedas];
+    
+    for(interacionesBusquedas = 0; interacionesBusquedas < cantidadBusquedas; interacionesBusquedas++) {
+        scanf("%i", &arrayGramosABuscar[interacionesBusquedas]);
+    }
+    
+    busquedaBinaria(arrayCaja, arrayGramosABuscar, 0, cantidadDeComponentesDeLaCaja - 1, cantidadBusquedas);
+}
+
+void busquedaBinaria(int arrayCaja[], int arrayGramosABuscar[], int izquierdaBusqueda, int derechaBusqueda, int cantidadBusquedas) {
+    int i = 0;
+    
+    for(i = 0; i < cantidadBusquedas; i++) {
+        int elementoABuscar = arrayGramosABuscar[i];
+        int izquierda = izquierdaBusqueda;
+        int derecha = derechaBusqueda;
+        int resultado = -1;
+        
+
+        while(izquierda <= derecha) {
+            int medio = (izquierda + derecha) / 2;
+            
+            if(arrayCaja[medio] <= elementoABuscar) {
+                resultado = medio;
+                izquierda = medio + 1;
+            } else {
+                derecha = medio - 1;
+            }
+        }
+        
+     
+        if(resultado == -1) {
+            if(i == cantidadBusquedas - 1) {
+                printf("0");
+            } else {
+                printf("0 ");
+            }
+        } else {
+            if(i == cantidadBusquedas - 1) {
+                printf("%d", resultado + 1);
+            } else {
+                printf("%d ", resultado + 1);
+            }
+        }
+    }
+    printf("\n");
+}
