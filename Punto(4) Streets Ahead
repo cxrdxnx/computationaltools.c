@@ -1,0 +1,105 @@
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#define MAX_CALLES 100000
+#define MAX_LONGITUD_NOMBRE 101
+
+typedef struct {
+    char nombre[MAX_LONGITUD_NOMBRE];
+    int indice_original;
+} Calle;
+
+void merger(Calle arregloCalles[], Calle temporal[], int izquierda, int medio, int derecha) {
+    int indiceIzquierda = izquierda;
+    int indiceDerecha = medio + 1;
+    int indiceTemporal = izquierda;
+    
+    while(indiceIzquierda <= medio && indiceDerecha <= derecha) {
+        if(strcmp(arregloCalles[indiceIzquierda].nombre, arregloCalles[indiceDerecha].nombre) <= 0) {
+            temporal[indiceTemporal] = arregloCalles[indiceIzquierda];
+            indiceIzquierda++;
+        } else {
+            temporal[indiceTemporal] = arregloCalles[indiceDerecha];
+            indiceDerecha++;
+        }
+        indiceTemporal++;
+    }
+    
+    while(indiceIzquierda <= medio) {
+        temporal[indiceTemporal] = arregloCalles[indiceIzquierda];
+        indiceIzquierda++;
+        indiceTemporal++;
+    }
+    
+    while(indiceDerecha <= derecha) {
+        temporal[indiceTemporal] = arregloCalles[indiceDerecha];
+        indiceDerecha++;
+        indiceTemporal++;
+    }
+    
+    for(int i = izquierda; i <= derecha; i++) {
+        arregloCalles[i] = temporal[i];
+    }
+}
+
+void mergerSort(Calle arregloCalles[], Calle temporal[], int izquierda, int derecha) {
+    if(izquierda < derecha) {
+        int medio = izquierda + (derecha - izquierda) / 2;
+        mergerSort(arregloCalles, temporal, izquierda, medio);
+        mergerSort(arregloCalles, temporal, medio + 1, derecha);
+        merger(arregloCalles, temporal, izquierda, medio, derecha);
+    }
+}
+
+int buscarBinaria(Calle arregloCalles[], int totalCalles, char nombreBuscado[]) {
+    int izquierda = 0;
+    int derecha = totalCalles - 1;
+    
+    while(izquierda <= derecha) {
+        int medio = izquierda + (derecha - izquierda) / 2;
+        int comparacion = strcmp(arregloCalles[medio].nombre, nombreBuscado);
+        
+        if(comparacion == 0) {
+            return arregloCalles[medio].indice_original;
+        } else if(comparacion < 0) {
+            izquierda = medio + 1;
+        } else {
+            derecha = medio - 1;
+        }
+    }
+    return -1;
+}
+
+int main() {
+    int numeroCalles, numeroConductores;
+    
+    scanf("%d %d", &numeroCalles, &numeroConductores);
+    
+    Calle arregloCalles[MAX_CALLES];
+    Calle temporal[MAX_CALLES];
+    
+    for(int i = 0; i < numeroCalles; i++) {
+        scanf("%s", arregloCalles[i].nombre);
+        arregloCalles[i].indice_original = i;
+    }
+    
+    mergerSort(arregloCalles, temporal, 0, numeroCalles - 1);
+    
+    for(int i = 0; i < numeroConductores; i++) {
+        char inicio[MAX_LONGITUD_NOMBRE], fin[MAX_LONGITUD_NOMBRE];
+        scanf("%s %s", inicio, fin);
+        
+        int posicionInicio = buscarBinaria(arregloCalles, numeroCalles, inicio);
+        int posicionFin = buscarBinaria(arregloCalles, numeroCalles, fin);
+        
+        if(posicionInicio == -1 || posicionFin == -1) {
+            printf("0\n");
+        } else {
+            int diferencia = abs(posicionInicio - posicionFin);
+            int resultado = diferencia - 1;
+            printf("%d\n", resultado);
+        }
+    }
+    
+    return 0;
+}
