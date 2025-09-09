@@ -3,141 +3,122 @@
 #include <math.h>
 #include <stdlib.h>
 
-void procesarArrayArmadoCaja(int cantidadDeComponentesDeLaCaja);
-void mergerSort(int arrayCaja[], int izquierdaCaja, int derechaCaja);
-void merger(int arrayCaja[], int izquierdaCaja, int medioCaja, int derechaCaja);
-void procesarBusquedaGramos(int arrayCaja[], int cantidadDeComponentesDeLaCaja);
-void busquedaBinaria(int arrayCaja[], int arrayGramosABuscar[], int izquierdaBusqueda, int derechaBusqueda, int cantidadBusquedas);
+void procesarArray(int n);
+void mergerSort(int arr[], int izq, int der);
+void merger(int arr[], int izq, int mid, int der);
+void procesarBusquedas(int arr[], int n);
+void buscarBinaria(int arr[], int consultas[], int izq, int der, int q);
 
 int main(void) {
-    int cantidadDeComponentesDeLaCaja = 0;
+    int n = 0;
     
-    while(scanf("%i", &cantidadDeComponentesDeLaCaja) != EOF) {
-        procesarArrayArmadoCaja(cantidadDeComponentesDeLaCaja);
+    while (scanf("%i", &n) != EOF) {
+        procesarArray(n);
     }
     
     return 0;
 }
 
-void procesarArrayArmadoCaja(int cantidadDeComponentesDeLaCaja) {
-    int arrayCaja[cantidadDeComponentesDeLaCaja];
-    int interacionArmado = 0;
-    int indexPrintf = 0;
-     
-    for(interacionArmado = 0; interacionArmado < cantidadDeComponentesDeLaCaja; interacionArmado++) {
-        scanf("%i", &arrayCaja[interacionArmado]);
+void procesarArray(int n) {
+    int arr[n];
+    
+    for (int i = 0; i < n; i++) {
+        scanf("%i", &arr[i]);
     }
     
-    mergerSort(arrayCaja, 0, cantidadDeComponentesDeLaCaja - 1);
+    mergerSort(arr, 0, n - 1);
     
- 
-    // Procesar para busqueda 
-    procesarBusquedaGramos(arrayCaja, cantidadDeComponentesDeLaCaja);
+    // Procesar consultas
+    procesarBusquedas(arr, n);
 }
 
-void mergerSort(int arrayCaja[], int izquierdaCaja, int derechaCaja) {
-    if (izquierdaCaja < derechaCaja) {  
-        int medioCaja = izquierdaCaja + (derechaCaja - izquierdaCaja) / 2;
+void mergerSort(int arr[], int izq, int der) {
+    if (izq < der) {  
+        int mid = izq + (der - izq) / 2;
         
-        mergerSort(arrayCaja, izquierdaCaja, medioCaja);
-        mergerSort(arrayCaja, medioCaja + 1, derechaCaja);
-        merger(arrayCaja, izquierdaCaja, medioCaja, derechaCaja);
+        mergerSort(arr, izq, mid);
+        mergerSort(arr, mid + 1, der);
+        merger(arr, izq, mid, der);
     }
 }
 
-void merger(int arrayCaja[], int izquierdaCaja, int medioCaja, int derechaCaja) {
-    int numbersFirst = medioCaja - izquierdaCaja + 1;
-    int numbersSecond = derechaCaja - medioCaja;
+void merger(int arr[], int izq, int mid, int der) {
+    int n1 = mid - izq + 1;
+    int n2 = der - mid;
 
-    int izquierdaMomentanea[numbersFirst];
-    int derechaMomentanea[numbersSecond];
+    int izqArr[n1], derArr[n2];
     
-    int indexI, indexJ;
-
-    for (indexI = 0; indexI < numbersFirst; indexI++) {
-        izquierdaMomentanea[indexI] = arrayCaja[izquierdaCaja + indexI];
+    for (int i = 0; i < n1; i++) {
+        izqArr[i] = arr[izq + i];
     }
     
-    for (indexJ = 0; indexJ < numbersSecond; indexJ++) {
-        derechaMomentanea[indexJ] = arrayCaja[medioCaja + 1 + indexJ];
+    for (int j = 0; j < n2; j++) {
+        derArr[j] = arr[mid + 1 + j];
     }
     
-    indexI = 0;
-    indexJ = 0;
-    int indexK = izquierdaCaja;
+    int i = 0, j = 0, k = izq;
     
-    while (indexI < numbersFirst && indexJ < numbersSecond) {
-        if (izquierdaMomentanea[indexI] <= derechaMomentanea[indexJ]) {
-            arrayCaja[indexK] = izquierdaMomentanea[indexI];
-            indexI++;
+    while (i < n1 && j < n2) {
+        if (izqArr[i] <= derArr[j]) {
+            arr[k] = izqArr[i];
+            i++;
         } else {
-            arrayCaja[indexK] = derechaMomentanea[indexJ];
-            indexJ++;
+            arr[k] = derArr[j];
+            j++;
         }
-        indexK++;
+        k++;
     }
 
-    while (indexI < numbersFirst) {
-        arrayCaja[indexK] = izquierdaMomentanea[indexI];
-        indexI++;
-        indexK++;
+    while (i < n1) {
+        arr[k] = izqArr[i];
+        i++;
+        k++;
     }
     
-    while (indexJ < numbersSecond) {
-        arrayCaja[indexK] = derechaMomentanea[indexJ];
-        indexJ++;
-        indexK++;
+    while (j < n2) {
+        arr[k] = derArr[j];
+        j++;
+        k++;
     }
 }
 
-void procesarBusquedaGramos(int arrayCaja[], int cantidadDeComponentesDeLaCaja) {
-    int cantidadBusquedas = 0;
-    int interacionesBusquedas = 0;
+void procesarBusquedas(int arr[], int n) {
+    int q = 0;
+    scanf("%i", &q);
     
-    scanf("%i", &cantidadBusquedas);
-    int arrayGramosABuscar[cantidadBusquedas];
+    int consultas[q];
     
-    for(interacionesBusquedas = 0; interacionesBusquedas < cantidadBusquedas; interacionesBusquedas++) {
-        scanf("%i", &arrayGramosABuscar[interacionesBusquedas]);
+    for (int i = 0; i < q; i++) {
+        scanf("%i", &consultas[i]);
     }
     
-    busquedaBinaria(arrayCaja, arrayGramosABuscar, 0, cantidadDeComponentesDeLaCaja - 1, cantidadBusquedas);
+    buscarBinaria(arr, consultas, 0, n - 1, q);
 }
 
-void busquedaBinaria(int arrayCaja[], int arrayGramosABuscar[], int izquierdaBusqueda, int derechaBusqueda, int cantidadBusquedas) {
-    int i = 0;
-    
-    for(i = 0; i < cantidadBusquedas; i++) {
-        int elementoABuscar = arrayGramosABuscar[i];
-        int izquierda = izquierdaBusqueda;
-        int derecha = derechaBusqueda;
-        int resultado = -1;
+void buscarBinaria(int arr[], int consultas[], int izq, int der, int q) {
+    for (int i = 0; i < q; i++) {
+        int x = consultas[i];
+        int l = izq;
+        int r = der;
+        int res = -1;
         
-
-        while(izquierda <= derecha) {
-            int medio = (izquierda + derecha) / 2;
+        while (l <= r) {
+            int mid = (l + r) / 2;
             
-            if(arrayCaja[medio] <= elementoABuscar) {
-                resultado = medio;
-                izquierda = medio + 1;
+            if (arr[mid] <= x) {
+                res = mid;
+                l = mid + 1;
             } else {
-                derecha = medio - 1;
+                r = mid - 1;
             }
         }
         
-     
-        if(resultado == -1) {
-            if(i == cantidadBusquedas - 1) {
-                printf("0");
-            } else {
-                printf("0 ");
-            }
+        if (res == -1) {
+            if (i == q - 1) printf("0");
+            else printf("0 ");
         } else {
-            if(i == cantidadBusquedas - 1) {
-                printf("%d", resultado + 1);
-            } else {
-                printf("%d ", resultado + 1);
-            }
+            if (i == q - 1) printf("%d", res + 1);
+            else printf("%d ", res + 1);
         }
     }
     printf("\n");
