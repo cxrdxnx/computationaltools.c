@@ -1,0 +1,135 @@
+// Taller 2 - Estructura de Datos - Dynamic Collection
+
+#include <stdio.h>
+#include <string.h>
+#include <math.h>
+#include <stdlib.h>
+#define MAXQ 1000000
+
+void Merge(int A[], int p, int q, int r)
+{
+    int n1 = q - p + 1;
+    int n2 = r - q;
+    int L[n1], R[n2];
+
+    for (int i = 0; i < n1; i++)
+        L[i] = A[p + i];
+    for (int j = 0; j < n2; j++)
+        R[j] = A[q + 1 + j];
+
+    int i = 0;
+    int j = 0;
+    for (int k = p; k <= r; k++)
+    {
+        if (i < n1 && (j >= n2 || L[i] <= R[j]))
+        {
+            A[k] = L[i];
+            i++;
+        }
+        else if (j < n2)
+        {
+            A[k] = R[j];
+            j++;
+        }
+    }
+}
+
+void MergeSort(int A[], int p, int r)
+{
+    if (p < r)
+    {
+        int q = (p + r) / 2;
+        MergeSort(A, p, q);
+        MergeSort(A, q + 1, r);
+        Merge(A, p, q, r);
+    }
+}
+
+int BinarySearch(int A[], int i, int j, int k)
+{
+    int r = -1;
+    while (i <= j){
+        int m = (i + j) / 2;
+        if (k == A[m]){ 
+            r = m; 
+            break; 
+        } 
+        else if (k > A[m]) 
+            i = m + 1; 
+        else
+            j = m - 1; 
+    } 
+
+    if (r == -1) 
+        r = i - 1; // No encontrado, devolver el menor que k
+
+    return r;
+}
+
+int BinarySearchFirstGreater(int A[], int n, long int k) {
+    int l = 0, r = n - 1, ans = n;
+    while (l <= r) {
+        int m = (l + r) / 2;
+        if (A[m] > k) {
+            ans = m;
+            r = m - 1;
+        } else {
+            l = m + 1;
+        }
+    }
+    return ans;
+}
+
+int BinarySearchLastLessEqual(int A[], int n, long int k) {
+    int l = 0, r = n - 1, ans = -1;
+    while (l <= r) {
+        int m = (l + r) / 2;
+        if (A[m] <= k) {
+            ans = m;
+            l = m + 1;
+        } else {
+            r = m - 1;
+        }
+    }
+    return ans;
+}
+
+int main(void) {
+    long int n = 0;
+    int q;
+    scanf("%ld %d", &n, &q);
+    int A[n + MAXQ]; // espacio extra por si agregas elementos
+
+    for (int i = 0; i < n; i++)
+        scanf("%d", &A[i]);
+
+    MergeSort(A, 0, n - 1);
+
+    for (int i = 0; i < q; i++) {
+        int opcion;
+        scanf("%d", &opcion);
+
+        if (opcion == 1) {
+            long int k;
+            scanf("%ld", &k);
+            int pos = BinarySearchLastLessEqual(A, n, k);
+            if (pos >= 0 && A[pos] == k) {
+                // Ya existe, no hacer nada
+            } else if (k > A[n - 1]) {
+                A[n] = k;
+                n++;
+            } else {
+                int rep = BinarySearchFirstGreater(A, n, k);
+                A[rep] = k;
+            }
+        } else if (opcion == 2) {
+            long int a, b;
+            scanf("%ld %ld", &a, &b);
+            int left = BinarySearchFirstGreater(A, n, a - 1);
+            int right = BinarySearchLastLessEqual(A, n, b);
+            int count = (right >= left) ? (right - left + 1) : 0;
+            printf("%d\n", count);
+        }
+    }
+    return 0;
+}
