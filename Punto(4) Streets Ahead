@@ -1,103 +1,103 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#define MAX_CALLES 100000
-#define MAX_LONGITUD_NOMBRE 101
+#define MAX_N 100000
+#define MAX_LEN 101
 
 typedef struct {
-    char nombre[MAX_LONGITUD_NOMBRE];
-    int indice_original;
+    char nombre[MAX_LEN];
+    int idx;
 } Calle;
 
-void merger(Calle arregloCalles[], Calle temporal[], int izquierda, int medio, int derecha) {
-    int indiceIzquierda = izquierda;
-    int indiceDerecha = medio + 1;
-    int indiceTemporal = izquierda;
+void merger(Calle arr[], Calle tmp[], int izq, int mid, int der) {
+    int i = izq;
+    int j = mid + 1;
+    int k = izq;
     
-    while(indiceIzquierda <= medio && indiceDerecha <= derecha) {
-        if(strcmp(arregloCalles[indiceIzquierda].nombre, arregloCalles[indiceDerecha].nombre) <= 0) {
-            temporal[indiceTemporal] = arregloCalles[indiceIzquierda];
-            indiceIzquierda++;
+    while (i <= mid && j <= der) {
+        if (strcmp(arr[i].nombre, arr[j].nombre) <= 0) {
+            tmp[k] = arr[i];
+            i++;
         } else {
-            temporal[indiceTemporal] = arregloCalles[indiceDerecha];
-            indiceDerecha++;
+            tmp[k] = arr[j];
+            j++;
         }
-        indiceTemporal++;
+        k++;
     }
     
-    while(indiceIzquierda <= medio) {
-        temporal[indiceTemporal] = arregloCalles[indiceIzquierda];
-        indiceIzquierda++;
-        indiceTemporal++;
+    while (i <= mid) {
+        tmp[k] = arr[i];
+        i++;
+        k++;
     }
     
-    while(indiceDerecha <= derecha) {
-        temporal[indiceTemporal] = arregloCalles[indiceDerecha];
-        indiceDerecha++;
-        indiceTemporal++;
+    while (j <= der) {
+        tmp[k] = arr[j];
+        j++;
+        k++;
     }
     
-    for(int i = izquierda; i <= derecha; i++) {
-        arregloCalles[i] = temporal[i];
+    for (int x = izq; x <= der; x++) {
+        arr[x] = tmp[x];
     }
 }
 
-void mergerSort(Calle arregloCalles[], Calle temporal[], int izquierda, int derecha) {
-    if(izquierda < derecha) {
-        int medio = izquierda + (derecha - izquierda) / 2;
-        mergerSort(arregloCalles, temporal, izquierda, medio);
-        mergerSort(arregloCalles, temporal, medio + 1, derecha);
-        merger(arregloCalles, temporal, izquierda, medio, derecha);
+void mergerSort(Calle arr[], Calle tmp[], int izq, int der) {
+    if (izq < der) {
+        int mid = izq + (der - izq) / 2;
+        mergerSort(arr, tmp, izq, mid);
+        mergerSort(arr, tmp, mid + 1, der);
+        merger(arr, tmp, izq, mid, der);
     }
 }
 
-int buscarBinaria(Calle arregloCalles[], int totalCalles, char nombreBuscado[]) {
-    int izquierda = 0;
-    int derecha = totalCalles - 1;
+int buscarBinaria(Calle arr[], int n, char key[]) {
+    int l = 0;
+    int r = n - 1;
     
-    while(izquierda <= derecha) {
-        int medio = izquierda + (derecha - izquierda) / 2;
-        int comparacion = strcmp(arregloCalles[medio].nombre, nombreBuscado);
+    while (l <= r) {
+        int mid = l + (r - l) / 2;
+        int cmp = strcmp(arr[mid].nombre, key);
         
-        if(comparacion == 0) {
-            return arregloCalles[medio].indice_original;
-        } else if(comparacion < 0) {
-            izquierda = medio + 1;
+        if (cmp == 0) {
+            return arr[mid].idx;
+        } else if (cmp < 0) {
+            l = mid + 1;
         } else {
-            derecha = medio - 1;
+            r = mid - 1;
         }
     }
     return -1;
 }
 
 int main() {
-    int numeroCalles, numeroConductores;
+    int n, q;
     
-    scanf("%d %d", &numeroCalles, &numeroConductores);
+    scanf("%d %d", &n, &q);
     
-    Calle arregloCalles[MAX_CALLES];
-    Calle temporal[MAX_CALLES];
+    Calle arr[MAX_N];
+    Calle tmp[MAX_N];
     
-    for(int i = 0; i < numeroCalles; i++) {
-        scanf("%s", arregloCalles[i].nombre);
-        arregloCalles[i].indice_original = i;
+    for (int i = 0; i < n; i++) {
+        scanf("%s", arr[i].nombre);
+        arr[i].idx = i;
     }
     
-    mergerSort(arregloCalles, temporal, 0, numeroCalles - 1);
+    mergerSort(arr, tmp, 0, n - 1);
     
-    for(int i = 0; i < numeroConductores; i++) {
-        char inicio[MAX_LONGITUD_NOMBRE], fin[MAX_LONGITUD_NOMBRE];
-        scanf("%s %s", inicio, fin);
+    for (int i = 0; i < q; i++) {
+        char ini[MAX_LEN], fin[MAX_LEN];
+        scanf("%s %s", ini, fin);
         
-        int posicionInicio = buscarBinaria(arregloCalles, numeroCalles, inicio);
-        int posicionFin = buscarBinaria(arregloCalles, numeroCalles, fin);
+        int posIni = buscarBinaria(arr, n, ini);
+        int posFin = buscarBinaria(arr, n, fin);
         
-        if(posicionInicio == -1 || posicionFin == -1) {
+        if (posIni == -1 || posFin == -1) {
             printf("0\n");
         } else {
-            int diferencia = abs(posicionInicio - posicionFin);
-            int resultado = diferencia - 1;
-            printf("%d\n", resultado);
+            int diff = abs(posIni - posFin);
+            int res = diff - 1;
+            printf("%d\n", res);
         }
     }
     
