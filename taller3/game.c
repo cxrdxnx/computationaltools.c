@@ -1,5 +1,5 @@
-#include "stdio.h"
-#include "stdlib.h"
+#include <stdio.h>
+#include <stdlib.h>
 
 void push_back(int **arr, int value, int *size)
 {
@@ -137,7 +137,7 @@ int main()
         int n = 0;
         scanf("%d", &n);
 
-        // cargar las listas de emma y otto.
+ 
         int *emma = (int *)malloc(n * sizeof(int));
         int emma_size = n;
         for (int i = 0; i < n; ++i)
@@ -154,8 +154,7 @@ int main()
 
         build_max_heap(emma, emma_size);
         build_min_heap(otto, otto_size);
-        
-        // jugar hasta que al menos una lista este vacia.
+  
         int turn = 0;
         while (emma_size > 0 && otto_size > 0)
         {
@@ -187,4 +186,5 @@ int main()
         free(emma);
         free(otto);
     }
+    return 0;
 }
