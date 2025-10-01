@@ -123,7 +123,6 @@ int main()
         int *max_heap = NULL;
         int max_heap_size = 0;
 
-
         double median_sum = 0.0;
         for (int i = 0; i < n; ++i)
         {
@@ -140,7 +139,8 @@ int main()
                 insert_min(&min_heap, element, &min_heap_size);
             }
 
-            // Mantener cantidad de elementos de max heap igual a la cantidad de elementos de  min heap + 1 como maximo.
+            // Mantener cantidad de elementos del max heap igual a la cantidad de elementos de  min heap + 1 como maximo.
+            // balanceo
             if (max_heap_size > min_heap_size + 1)
             {
                 int val = extract_max(max_heap, &max_heap_size);
@@ -163,4 +163,5 @@ int main()
     }
     
     return 0;
+
 }
