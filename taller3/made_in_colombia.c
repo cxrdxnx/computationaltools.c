@@ -1,5 +1,5 @@
-#include "stdio.h"
-#include "stdlib.h"
+#include <stdio.h>
+#include <stdlib.h>
 
 void push_back(int **arr, int value, int *size)
 {
@@ -139,8 +139,7 @@ int main()
                 insert_min(&min_heap, element, &min_heap_size);
             }
 
-            // Mantener cantidad de elementos del max heap igual a la cantidad de elementos de  min heap + 1 como maximo.
-            // balanceo
+
             if (max_heap_size > min_heap_size + 1)
             {
                 int val = extract_max(max_heap, &max_heap_size);
@@ -165,3 +164,4 @@ int main()
     return 0;
 
 }
+
