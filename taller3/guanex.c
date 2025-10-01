@@ -1,113 +1,119 @@
-#include "stdio.h"
-#include "stdlib.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+# define myNegativeInfinite -9223372036854775807
+# define myPositiveInfinite 9223372036854775807
+#define MAXT 1000000
 
-void push_back(int **arr, int value, int *size)
+int Parent ( int i)
 {
-    int *temp = (int *)realloc(*arr, (*size + 1) * sizeof(int));
-    if (temp == NULL)
-    {
-        fprintf(stderr, "Error: no se pudo asignar memoria\n");
-        exit(EXIT_FAILURE);
-    }
-    *arr = temp;
-
-    (*arr)[*size] = value;
-    (*size)++;
+return i / 2;
 }
-
-int parent(int i)
+int Left (int i)
 {
-    return (i - 1) / 2;
+return 2 * i;
 }
-
-int left(int i)
+int Right ( int i)
 {
-    return (i * 2) + 1;
+return 2 * i + 1;
 }
-
-int right(int i)
+void MinHeapify ( long long Q[] , int i, int heapSize )
 {
-    return (i * 2) + 2;
+int l, r, least ;
+long long temp ;
+l = Left (i);
+r = Right (i);
+if ((l <= heapSize ) && (Q[l] < Q[i]) )
+least = l;
+else
+least = i;
+if ((r <= heapSize ) && (Q[r] < Q[ least ]) )
+least = r;
+if( least != i)
+{
+temp = Q[i];
+Q[i] = Q[ least ];
+Q[ least ] = temp ;
+MinHeapify (Q, least , heapSize );
 }
-
-void insert(int **mheap, int value, int *heap_size)
-{
-    push_back(mheap, value, heap_size);
-    int current = (*heap_size) - 1;
-
-    // mientras current no sea la raiz y sea menor a su padre
-    while (current > 0 && (*mheap)[current] < (*mheap)[parent(current)])
-    {
-        // flotar a current para cumplir propiedad de min-heap.
-        int temp = (*mheap)[current];
-        (*mheap)[current] = (*mheap)[parent(current)]; 
-        (*mheap)[parent(current)] = temp;
-
-        current = parent(current);
-    }
 }
-
-void min_heapify(int **mheap, int index, int *heap_size)
+long long MinPQ_Minimum ( long long Q [], int heapSize )
 {
-    int smallest = index;
-    int l = left(index);
-    int r = right(index);
-
-    if (l < (*heap_size) && (*mheap)[l] < (*mheap)[smallest]) smallest = l;
-    if (r < (*heap_size) && (*mheap)[r] < (*mheap)[smallest]) smallest = r;
-
-    // el elemento en index tenia hijos (no era una hoja)
-    if (smallest != index)
-    {
-        int temp = (*mheap)[index];
-        (*mheap)[index] = (*mheap)[smallest];
-        (*mheap)[smallest] = temp;
-
-        min_heapify(mheap, smallest, heap_size);
-    }
+if(heapSize < 1)
+return myNegativeInfinite;
+return Q [1];
 }
-
-void extract(int **mheap, int *heap_size)
+long long MinPQ_Extract ( long long Q[] , int * heapSize )
 {
-    (*mheap)[0] = (*mheap)[(*heap_size) - 1]; // intercambiar raiz y ultimo valor.
-    (*heap_size)--; // eliminar ultimo elemento logicamente(no en memoria).
-    if (*heap_size > 0)
-    {
-        min_heapify(mheap, 0, heap_size);
-    }
+long long min = myNegativeInfinite ;
+if (* heapSize < 1)
+return myNegativeInfinite;
+else
+{
+min = Q [1];
+Q [1] = Q[* heapSize ];
+(* heapSize ) --;
+MinHeapify (Q, 1, * heapSize );
 }
-
-int main()
+return min ;
+}
+void MinPQ_DecreaseKey ( long long Q[] , int i, long long key )
 {
-    int queries = 0; // de 1 a 2*10^6
-    scanf("%d", &queries);
-
-    int *mheap = NULL;
-    int size = 0;
-
-    while(queries--)
-    {
-        int type = 0;
-        scanf("%d", &type);
-
-        if (type == 1)
-        {
-            int value = 0; // de 0 a 10^6
-            scanf("%d", &value);
-            insert(&mheap, value, &size);
-        }
-        else if (type == 2)
-        {
-            if (size > 0)
-            {
-                extract(&mheap, &size);
-            }
-        }
-        else if (type == 3)
-        {
-            (size > 0) ? printf("%d\n", mheap[0]) : printf("Empty!\n");
-        }
-    }
-
-    return 0;
+long long temp ;
+if( key > Q[i])
+return;
+else
+{
+Q[i] = key ;
+while ((i > 1) && (Q[ Parent (i)] > Q[i]) )
+{
+temp = Q[i];
+Q[i] = Q[ Parent (i) ];
+Q[ Parent (i)] = temp ;
+i = Parent (i);
+}
+}
+}
+void MinPQ_Insert (long long Q[] , long long key , int * heapSize )
+{
+if(*heapSize >= MAXT) return;
+(* heapSize ) ++;
+Q[* heapSize ] = key ;
+int i = *heapSize;
+long long temp;
+while ((i > 1) && (Q[ Parent (i)] > Q[i]) )
+{
+temp = Q[i];
+Q[i] = Q[ Parent (i) ];
+Q[ Parent (i)] = temp ;
+i = Parent (i);
+}
+}
+int main ()
+{
+int n, operation , heapSize = 0;
+long long element , Q[ MAXT + 1] ;
+scanf("%d", &n);
+for(int i = 0; i < n; i++)
+{
+scanf("%d", &operation);
+if( operation == 1)
+{
+scanf (" %lld", & element );
+MinPQ_Insert (Q, element , & heapSize );
+}
+else if( operation == 2)
+{
+MinPQ_Extract (Q, & heapSize );
+}
+else if( operation == 3)
+{
+long long min = MinPQ_Minimum(Q, heapSize);
+if(min == myNegativeInfinite)
+printf("Empty!\n");
+else
+printf("%lld\n", min);
+}
+}
+return 0;
 }
