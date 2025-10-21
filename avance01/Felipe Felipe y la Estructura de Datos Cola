@@ -1,0 +1,111 @@
+#include <stdlib.h>
+#include <stdio.h>
+#define TRUE 1
+#define FALSE 0
+
+struct node {
+    int key;
+    struct node* next;
+};
+
+struct queue {
+    struct node* front;
+    struct node* rear;
+    int totalSum;
+};
+
+struct queue* createQueue() {
+    struct queue* q = (struct queue*) malloc(sizeof(struct queue));
+    q->front = NULL;
+    q->rear = NULL;
+    q->totalSum = 0;
+    return q;
+}
+
+void enqueue(struct queue* q, int element) {
+    struct node* newNode = (struct node*) malloc(sizeof(struct node));
+    newNode->key = element;
+    newNode->next = NULL;
+    
+    if (q->rear == NULL) {
+        q->front = q->rear = newNode;
+    } else {
+        q->rear->next = newNode;
+        q->rear = newNode;
+    }
+    q->totalSum += element;
+}
+
+int dequeue(struct queue* q) {
+    if (q->front == NULL) return -1;
+    
+    struct node* temp = q->front;
+    int element = temp->key;
+    q->totalSum -= element;
+    q->front = q->front->next;
+    
+    if (q->front == NULL)
+        q->rear = NULL;
+    
+    free(temp);
+    return element;
+}
+
+int queueEmpty(struct queue* q) {
+    if (q->front == NULL)
+        return TRUE;
+    else
+        return FALSE;
+}
+
+void deleteQueue(struct queue* q) {
+    struct node* current = q->front;
+    while (current != NULL) {
+        struct node* next = current->next;
+        free(current);
+        current = next;
+    }
+    q->front = q->rear = NULL;
+    q->totalSum = 0;
+}
+
+void sumQueue(struct queue* q) {
+    printf("%d\n", q->totalSum);
+}
+
+int main() {
+    int totalCases, totalQueries;
+    int operation, element;
+    
+    scanf("%d", &totalCases);
+    
+    for (int idCase = 1; idCase <= totalCases; idCase++) {
+        struct queue* q = createQueue();
+        
+        scanf("%d", &totalQueries);
+        
+        for (int idQuery = 1; idQuery <= totalQueries; idQuery++) {
+            scanf("%d", &operation);
+            
+            if (operation == 1) {
+                scanf("%d", &element);
+                enqueue(q, element);
+            } else if (operation == 2) {
+                if (!queueEmpty(q)) {
+                    dequeue(q);
+                }
+            } else if (operation == 3) {
+                if (queueEmpty(q)) {
+                    printf("Empty!\n");
+                } else {
+                    sumQueue(q);
+                }
+            }
+        }
+        
+        deleteQueue(q);
+        free(q);
+    }
+    
+    return 0;
+}
