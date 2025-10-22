@@ -8,19 +8,18 @@ struct node
     struct node* next;
 };
 
-// Acepta punteros a la cabeza y a la cola para poder modificarlos.
 void insert_at_end(struct node** head, struct node** tail, char character)
 {
     struct node* new_node = (struct node*)malloc(sizeof(struct node));
     new_node->data = character;
     new_node->next = NULL;
 
-    if (*head == NULL) { // Si la lista está vacía
+    if (*head == NULL) {
         *head = new_node;
         *tail = new_node;
-    } else { // Si la lista ya tiene nodos
-        (*tail)->next = new_node; // Enlaza la cola actual al nuevo nodo
-        *tail = new_node;       // Actualiza la cola para que sea el nuevo nodo
+    } else {
+        (*tail)->next = new_node;
+        *tail = new_node;
     }
 }
 
@@ -33,12 +32,12 @@ void remove_excluded_chars(struct node** head, const bool exclusion_map[256])
         if (exclusion_map[(unsigned char)current->data])
         {
             struct node* node_to_delete = current;
-            if (previous == NULL) // Eliminando la cabeza
+            if (previous == NULL)
             {
                 *head = current->next;
                 current = *head;
             }
-            else // Eliminando en medio o al final
+            else
             {
                 previous->next = current->next;
                 current = previous->next;
@@ -76,7 +75,6 @@ void remove_consecutive_duplicates(struct node** head)
 
 void trim_whitespace(struct node** head)
 {
-    // Eliminar espacios al principio
     while (*head != NULL && (*head)->data == ' ')
     {
         struct node* node_to_delete = *head;
@@ -84,9 +82,8 @@ void trim_whitespace(struct node** head)
         free(node_to_delete);
     }
 
-    if (*head == NULL) return; // La lista quedó vacía
+    if (*head == NULL) return;
 
-    // Eliminar espacios al final
     struct node* current = *head;
     struct node* last_non_space = NULL;
     while (current != NULL)
@@ -101,9 +98,8 @@ void trim_whitespace(struct node** head)
     if (last_non_space != NULL && last_non_space->next != NULL)
     {
         current = last_non_space->next;
-        last_non_space->next = NULL; // Cortar la lista
+        last_non_space->next = NULL;
 
-        // Liberar los nodos cortados
         while (current != NULL)
         {
             struct node* node_to_delete = current;
@@ -121,14 +117,13 @@ void print_and_free_list(struct node* head)
         printf("%c", current->data);
         struct node* node_to_delete = current;
         current = current->next;
-        free(node_to_delete); // Liberamos la memoria mientras imprimimos
+        free(node_to_delete);
     }
     printf("\n");
 }
 
 int main()
 {
-    // Construir la lista enlazada
     struct node* message_head = NULL;
     struct node* message_tail = NULL;
     char character;
@@ -137,7 +132,6 @@ int main()
         insert_at_end(&message_head, &message_tail, character);
     }
 
-    // Leer la lista de exclusión y crear el mapa de búsqueda (O(1))
     scanf(" %*c");
     char exclusion_list[37];
     int exclusion_count = 0;
@@ -154,7 +148,6 @@ int main()
         exclusion_map[(unsigned char)exclusion_list[i]] = true;
     }
 
-    // Aplicar los filtros en secuencia
     remove_excluded_chars(&message_head, exclusion_map);
     remove_consecutive_duplicates(&message_head);
     trim_whitespace(&message_head);
