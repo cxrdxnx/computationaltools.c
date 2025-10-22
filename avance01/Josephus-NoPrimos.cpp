@@ -3,13 +3,11 @@
 #include <string.h>
 #include <math.h>
 
-// Definicion de la estructura del nodo
 typedef struct node {
     int key;
     struct node *next;
 } node;
 
-// Inserta un nuevo nodo al final de la lista circular
 node *InsertCircularLL(node *tail, int element) {
     node *newNode = (node *) malloc(sizeof(node));
     newNode->key = element;
@@ -25,7 +23,6 @@ node *InsertCircularLL(node *tail, int element) {
     return tail;
 }
 
-// Calcula el MCD entre dos numeros (algoritmo de Euclides)
 int mcd(int a, int b) {
     while (b != 0) {
         int temp = b;
@@ -35,7 +32,6 @@ int mcd(int a, int b) {
     return a;
 }
 
-// Elimina el nodo apuntado por "target" y devuelve el nuevo tail
 node *DeleteNode(node *tail, node *prev, node *target) {
     if (target == tail && target->next == tail) {
         free(target);
@@ -52,7 +48,6 @@ node *DeleteNode(node *tail, node *prev, node *target) {
     return tail;
 }
 
-// Elimina al jugador del juego hasta llegar al ganador
 int EliminatePlayer(node *tail) {
     if (tail == NULL) return -1;
 
@@ -84,7 +79,7 @@ int EliminatePlayer(node *tail) {
         }
     }
 
-    return tail->key; // ultimo jugador en pie
+    return tail->key;
 }
 
 int main() {
