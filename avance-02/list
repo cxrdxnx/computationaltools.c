@@ -1,0 +1,113 @@
+int main() {
+    int totalCases, element;
+    struct nodeRBTree *T_Max, *T_Min;
+    
+    T_Max = AssignNilLeaf();
+    T_Min = AssignNilLeaf();
+    
+    scanf("%d", &totalCases);
+    int medianaActual = 0;
+    int sizeMax = 0;  
+    int sizeMin = 0;  
+    
+    while (totalCases--) {
+        int operation;
+        scanf("%d", &operation);
+        
+        if (operation == 1) {
+            scanf("%d", &element);
+            
+            if (sizeMax == 0) {
+                T_Max = RB_Insert(T_Max, element);
+                sizeMax++;
+            } else if (element <= TreeMaximum(T_Max)->key) {
+                T_Max = RB_Insert(T_Max, element);
+                sizeMax++;
+            } else {
+                T_Min = RB_Insert(T_Min, element);
+                sizeMin++;
+            }
+            
+            if (sizeMax > sizeMin + 1) {
+                struct nodeRBTree *maxNode = TreeMaximum(T_Max);
+                int val = maxNode->key;
+                T_Max = RB_Delete(T_Max, maxNode);
+                T_Min = RB_Insert(T_Min, val);
+                sizeMax--;
+                sizeMin++;
+            }
+            
+            if (sizeMin > sizeMax) {
+                struct nodeRBTree *minNode = TreeMinimum(T_Min);
+                int val = minNode->key;
+                T_Min = RB_Delete(T_Min, minNode);
+                T_Max = RB_Insert(T_Max, val);
+                sizeMin--;
+                sizeMax++;
+            }
+            
+        } else if (operation == 2) {
+            scanf("%d", &element);
+            
+            struct nodeRBTree *valor = TreeSearch(T_Max, element);
+            if (valor->key != NILKey) {
+                T_Max = RB_Delete(T_Max, valor);
+                sizeMax--;
+            } else {
+                valor = TreeSearch(T_Min, element);
+                if (valor->key != NILKey) {
+                    T_Min = RB_Delete(T_Min, valor);
+                    sizeMin--;
+                }
+            }
+            
+            if (sizeMax > sizeMin + 1) {
+                struct nodeRBTree *maxNode = TreeMaximum(T_Max);
+                int val = maxNode->key;
+                T_Max = RB_Delete(T_Max, maxNode);
+                T_Min = RB_Insert(T_Min, val);
+                sizeMax--;
+                sizeMin++;
+            }
+            
+            if (sizeMin > sizeMax) {
+                struct nodeRBTree *minNode = TreeMinimum(T_Min);
+                int val = minNode->key;
+                T_Min = RB_Delete(T_Min, minNode);
+                T_Max = RB_Insert(T_Max, val);
+                sizeMin--;
+                sizeMax++;
+            }
+        }
+        
+        if (sizeMax == 0 && sizeMin == 0) {
+            medianaActual = 0;
+        } else {
+            struct nodeRBTree *curMax = TreeMaximum(T_Max);
+            struct nodeRBTree *curMin;
+            if (sizeMin > 0) {
+                curMin = TreeMinimum(T_Min);
+            } else {
+                curMin = NULL;
+            }
+            
+            if (sizeMax == sizeMin && curMin != NULL) {
+                medianaActual = (curMax->key + curMin->key) / 2;
+            } else {
+                medianaActual = curMax->key;
+            }
+        }
+        
+        if (operation == 3) {
+            if (sizeMax == 0 && sizeMin == 0) {
+                printf("Empty!\n");
+            } else {
+                printf("%d\n", medianaActual);
+            }
+        }
+    }
+    
+    return 0;
+}
+    
+ 
