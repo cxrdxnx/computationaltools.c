@@ -1,19 +1,3 @@
-/*******************************************************************/
-/*******************************************************************/
-/* Institution: Universidad Tecnologica de Pereira.                */
-/* Country: Colombia (south america).                              */
-/* Course: Estructura de Datos (Data Structure).                   */
-/* Group: 05.                                                      */
-/* Professor: Hugo Humberto Morales P.                             */
-/* Semester: February/June                                         */
-/* Date: May 26th, 2025.                                           */
-/* Implementation: DFS's Algorithm on mazes.                       */
-/* Topics: * Depth-First Search (DFS).                             */
-/*         * Mazes.                                                */
-/*                                                                 */
-/* NOTES: * Implementation of DFS's Algorithm on mazes.            */
-/*******************************************************************/
-/*******************************************************************/
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
